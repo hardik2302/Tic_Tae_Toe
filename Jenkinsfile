@@ -24,6 +24,7 @@ pipeline {
             steps {
                 script {
                     def SCANNER_HOME = tool 'SonarQube Scanner';
+                    sh 'which sonar-scanner || echo "SonarQube Scanner not found"'
                     withSonarQubeEnv(SONARQUBE) {
                         sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=tic_tae_toe -Dsonar.sources=main.py'
                     }
