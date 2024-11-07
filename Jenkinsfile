@@ -9,7 +9,7 @@ pipeline{
 	stages{
 		stage('Git Checkout'){
 			steps{
-				checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hardik2302/Tic_Tae_Toe']])
+				checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hardik2302/Tic_Tae_Toe']])
 			}
 		}
 		stage('Install Dependencies') {
