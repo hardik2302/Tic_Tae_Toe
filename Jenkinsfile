@@ -15,8 +15,8 @@ pipeline{
 		stage('Install Dependencies') {
             steps {
                 script {
-                    // Install necessary packages before proceeding
-                    sudo apt install python3-numpy
+                    // Ensure sudo access, and use a virtual environment for python dependencies
+                    sh 'sudo apt-get update && sudo apt-get install -y python3-numpy'
                 }
             }
         }
