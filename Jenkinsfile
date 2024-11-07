@@ -14,7 +14,12 @@ pipeline{
 		}
 		stage('Install Dependencies') {
             steps {
-                sh 'pip install numpy'
+                script {
+                    // Ensure pip is installed and install dependencies in a virtual environment
+                    sh 'python3 -m venv venv || python -m venv venv'  // Create virtual environment
+                    sh './venv/bin/pip install --upgrade pip || venv\\Scripts\\pip install --upgrade pip'  // Upgrade pip to ensure latest version
+                    sh './venv/bin/pip install numpy || venv\\Scripts\\pip install numpy'  // Install numpy
+                }
             }
         }
 		stage('SonarQube Analysis'){
