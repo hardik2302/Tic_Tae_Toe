@@ -1,20 +1,20 @@
-pipeline{
-	agent any
-	tools {
-        sonarScanner 'SonarScanner' // This should match the name of the SonarScanner tool configured in Jenkins
+pipeline {
+    agent any
+    tools {
+        sonarScanner 'SonarScanner' // This should match the name of your SonarQube scanner as configured in Jenkins Global Tool Configuration
     }
-	environment {
-        SONARQUBE = 'SonarQube' // This should be the name of your SonarQube server in Jenkins
+    environment {
+        SONARQUBE = 'SonarQube' // Name of your SonarQube server
         SONAR_TOKEN = credentials('SonarQube-Secret') // Use Jenkins credentials for the SonarQube token
     }
-	
-	stages{
-		stage('Git Checkout'){
-			steps{
-				checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hardik2302/Tic_Tae_Toe']])
-			}
-		}
-		stage('Install Dependencies') {
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hardik2302/Tic_Tae_Toe']])
+            }
+        }
+        stage('Install Dependencies') {
             steps {
                 script {
                     // Ensure sudo access, and use a virtual environment for python dependencies
@@ -22,25 +22,23 @@ pipeline{
                 }
             }
         }
-
-		stage('SonarQube Analysis'){
-			steps{
-				script {
+        stage('SonarQube Analysis') {
+            steps {
+                script {
                     withSonarQubeEnv(SONARQUBE) {
                         sh 'sonar-scanner -Dsonar.projectKey=tic_tae_toe -Dsonar.sources=main.py'
                     }
                 }
-			}
-		}
-		stage('Quality Gate') {
+            }
+        }
+        stage('Quality Gate') {
             steps {
                 script {
-                    // Wait for the SonarQube Quality Gate status
                     timeout(time: 1, unit: 'HOURS') {
                         waitForQualityGate abortPipeline: true
                     }
                 }
             }
         }
-	}
+    }
 }
