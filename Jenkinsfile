@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    tools {
-        SonarQubeScanner 'SonarQube Scanner' // This should match the name of your SonarQube scanner as configured in Jenkins Global Tool Configuration
-    }
+
     environment {
         SONARQUBE = 'SonarQube' // Name of your SonarQube server
         SONAR_TOKEN = credentials('SonarQube-Secret') // Use Jenkins credentials for the SonarQube token
@@ -25,8 +23,9 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
+                    def SCANNER_HOME = tool 'SonarQube Scanner';
                     withSonarQubeEnv(SONARQUBE) {
-                        sh 'sonar-scanner -Dsonar.projectKey=tic_tae_toe -Dsonar.sources=main.py'
+                        sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=tic_tae_toe -Dsonar.sources=main.py'
                     }
                 }
             }
