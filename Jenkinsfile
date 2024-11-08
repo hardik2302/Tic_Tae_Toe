@@ -24,7 +24,6 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool 'SonarScanner';
-                    sh 'which sonar-scanner || echo "SonarQube Scanner not found"'
                     withSonarQubeEnv() {
                       sh "${scannerHome}/bin/sonar-scanner"
                     }
