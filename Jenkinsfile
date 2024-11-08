@@ -4,7 +4,7 @@ pipeline {
     environment {
         // SONARQUBE = 'sonarqube' // Name of your SonarQube server
         // SONAR_TOKEN = credentials('SonarQube-Secret') // Use Jenkins credentials for the SonarQube token
-        IMAGE_NAME = "hardikagrawal2320/Tic-Tae-Toe"
+        IMAGE_NAME = "hardikagrawal2320/tic-tae-toe"
         VERSION_TAG = "${BUILD_NUMBER}" // Use Jenkins build number as version tag
     }
 
