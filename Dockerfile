@@ -10,5 +10,8 @@ COPY . /app
 # Install dependencies
 RUN pip install -r requirements.txt
 
+# Expose port 9099 for the application
+EXPOSE 9099
+
 # Run the Tic-Tac-Toe application
 CMD ["python", "main.py"]
