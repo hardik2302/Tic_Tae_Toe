@@ -7,7 +7,9 @@ WORKDIR /app
 # Install Tkinter and other dependencies
 RUN apt-get update && apt-get install -y \
     python3-tk \
+    libx11-dev \
     && apt-get clean
+
 
 # Copy the current directory contents into the container at /app
 COPY . /app
