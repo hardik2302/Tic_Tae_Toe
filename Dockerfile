@@ -1,22 +1,21 @@
-# Use the official Python image as the base image
+# Use an official Python runtime as a base image
 FROM python:3.9-slim
-
-# Install Tkinter dependencies
-RUN apt-get update && apt-get install -y \
-    libtk8.6 \
-    tk \
-    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the local files into the container
+# Install Tkinter and other dependencies
+RUN apt-get update && apt-get install -y \
+    python3-tk \
+    && apt-get clean
+
+# Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install Python dependencies
-RUN pip install -r requirements.txt
+# Install required Python packages (if any)
+RUN pip install --no-cache-dir numpy
 
-# Expose the port the app will run on
+# Make port 9099 available to the world outside this container (optional, not needed for Tkinter-based app)
 EXPOSE 9099
 
 # Run the Tic-Tac-Toe application
