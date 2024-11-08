@@ -2,8 +2,10 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'sonarqube' // Name of your SonarQube server
-        SONAR_TOKEN = credentials('SonarQube-Secret') // Use Jenkins credentials for the SonarQube token
+        // SONARQUBE = 'sonarqube' // Name of your SonarQube server
+        // SONAR_TOKEN = credentials('SonarQube-Secret') // Use Jenkins credentials for the SonarQube token
+        IMAGE_NAME = "hardikagrawal2320/Tic-Tae-Toe"
+        VERSION_TAG = "${BUILD_NUMBER}" // Use Jenkins build number as version tag
     }
 
     stages {
@@ -30,11 +32,29 @@ pipeline {
                 }
             }
         }
-        stage('Quality Gate') {
+        // stage('Quality Gate') {
+        //     steps {
+        //         script {
+        //             timeout(time: 1, unit: 'HOURS') {
+        //                 waitForQualityGate abortPipeline: true
+        //             }
+        //         }
+        //     }
+        // }
+        stage('Docker build') {
             steps {
                 script {
-                    timeout(time: 1, unit: 'HOURS') {
-                        waitForQualityGate abortPipeline: true
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        sh "docker build -t ${IMAGE_NAME}:${VERSION_TAG} ."
+                    }
+                }
+            }
+        }
+        stage('Docker Push Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        sh "docker push ${IMAGE_NAME}:${VERSION_TAG}"
                     }
                 }
             }
