@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'SonarQube' // Name of your SonarQube server
+        SONARQUBE = 'sonarqube' // Name of your SonarQube server
         SONAR_TOKEN = credentials('SonarQube-Secret') // Use Jenkins credentials for the SonarQube token
     }
 
@@ -23,10 +23,10 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def SCANNER_HOME = tool 'SonarQube Scanner';
+                    def scannerHome = tool 'SonarScanner';
                     sh 'which sonar-scanner || echo "SonarQube Scanner not found"'
-                    withSonarQubeEnv(SONARQUBE) {
-                        sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=tic_tae_toe -Dsonar.sources=main.py'
+                    withSonarQubeEnv() {
+                      sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
